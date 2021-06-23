@@ -344,6 +344,13 @@
    :main-opts  ["-m" "carve.main"]}
 
 
+  ;; Convert Leiningen projects to Clojure CLI tools with depify
+  :project/depify
+  {:extra-deps {depify/depify {:git/url "https://github.com/hagmonk/depify"
+                               :sha     "b3f61517c860518c1990133aa6eb54caf1e4d591"}}
+   :main-opts  ["-m" "depify.project"]}
+
+
   ;; End of: Projects and dependencies
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -462,6 +469,19 @@
 
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Formatting tools
+
+  ;; pretty printing capabilities for Clojure code and EDN
+  ;; clojure -M:data/zprint filename
+  :format/zprint
+  {:extra-deps {zprint/zprint {:mvn/version "1.1.2"}}
+   :main-opts  ["-m" "zprint.main"]}
+
+  ;; End of: Data manipulation tools
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Databases and drivers uses only during development
 
   ;; H2 embedded database
@@ -485,12 +505,12 @@
 
   :inspect/portal-web
   {:extra-deps {djblue/portal             {:mvn/version "0.11.2"}
-                org.clojure/clojurescript {:mvn/version "1.10.866"}}
+                org.clojure/clojurescript {:mvn/version "1.10.844"}}
    :main-opts  ["-m" "cljs.main"]}
 
   :inspect/portal-node
   {:extra-deps {djblue/portal             {:mvn/version "0.11.2"}
-                org.clojure/clojurescript {:mvn/version "1.10.866"}}
+                org.clojure/clojurescript {:mvn/version "1.10.844"}}
    :main-opts  ["-m" "cljs.main" "-re" "node"]}
 
 
@@ -652,7 +672,7 @@
   ;; Run a REPL using nREPL server for access by cider-connect-cljs
   ;; clojure -M:middleware/cider-cljs
   :middleware/cider-cljs
-  {:extra-deps {org.clojure/clojurescript {:mvn/version "1.10.866"}
+  {:extra-deps {org.clojure/clojurescript {:mvn/version "1.10.773"}
                 nrepl/nrepl               {:mvn/version "0.8.3"}
                 cider/cider-nrepl         {:mvn/version "0.26.0"}
                 cider/piggieback          {:mvn/version "0.5.2"}}
@@ -1122,12 +1142,12 @@
 
  :mvn/repos {"central" {:url "http://maven.aliyun.com/nexus/content/groups/public/"}
              "clojars" {:url "https://mirrors.tuna.tsinghua.edu.cn/clojars/"}
-             
-             ;; 浣跨敤鏈湴浠ｇ悊
-             ;; "central" {:url "http://127.0.0.1:20080/repository/central/"}
-             ;; "clojars" {:url "http://127.0.0.1:20080/repository/corjars/"}
 
-	           ;; Clojure snapshots
+             ;; 使用本地代理
+             ;; "central" {:url "http://20.60.250.188/nexus/repository/central/"}
+             ;; "clojars" {:url "http://20.60.250.188/nexus/repository/corjars/"}
+
+             ;; Clojure snapshots
              ;; "sonatype" {:url "https://oss.sonatype.org/content/repositories/snapshots/"}
 
              ;; clojars.org mirror - publicly accessible
