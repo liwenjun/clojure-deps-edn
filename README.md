@@ -45,13 +45,17 @@ clojure -Sdescribe
 
 When Clojure CLI runs for the first time a configuration directory is created in `$XDG_CONFIG_HOME/clojure` or `$HOME/.clojure` if [XDG_CONFIG_HOME](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html "FreeDesktop.org specification") not set
 
+> Practicalli recommends setting `$XDG_CONFIG_HOME` to `$HOME/.config`
+
 Backup or delete the Clojure CLI configuration directory if it exists
 
 Clone [practicalli/clojure-deps-edn](https://github.com/practicalli/clojure-deps-edn) repository (or create a fork and clone that instead)
 
 ```shell
-git git@github.com:practicalli/clojure-deps-edn.git $XDG_CONFIG_HOME/clojure
+git clone git@github.com:practicalli/clojure-deps-edn.git $XDG_CONFIG_HOME/clojure
 ```
+
+> If $XDG_CONFIG_HOME not set, then use `git clone git@github.com:practicalli/clojure-deps-edn.git $HOME/.clojure`
 
 The `deps.edn` file in the Clojure CLI configuration directory contains all the Practicalli aliases, which are available from any Clojure CLI project for the current user account.
 
@@ -149,11 +153,12 @@ See [Middleware aliases](#middleware) to run a headless REPL process without a R
 
 Use the `:env/dev` alias with the :repl aliases to include `dev/` in classpath and [configure REPL startup actions using `dev/user.clj`](https://practical.li/clojure/clojure-cli/projects/configure-repl-startup.html)
 
-| Command                         | Description                                                                                                    |
-|---------------------------------|----------------------------------------------------------------------------------------------------------------|
-| `clojure -M:repl/rebel`         | Run a Clojure REPL using Rebel Readline                                                                        |
-| `clojure -M:env/dev:repl/rebel` | Run a Clojure REPL using Rebel Readline, including deps and path from `:env/dev` alias to configure REPL start |
-| `clojure -M:repl/rebel-cljs`    | Run a ClojureScript REPL using Rebel Readline                                                                  |
+| Command                         | Description                                                                  |
+|---------------------------------|------------------------------------------------------------------------------|
+| `clojure -M:repl/rebel`         | Rich terminal UI Clojure REPL using Rebel Readline                           |
+| `clojure -M:env/dev:repl/rebel` | As above, including `:extra-deps` and `:extra-path` from `:env/dev` alias    |
+| `clojure -M:repl/rebel-cljs`    | Rich terminal UI ClojureScript REPL using Rebel Readline                     |
+| `clojure -M:repl/rebel-reveal`  | Rich terminal UI Clojure REPL using Rebel Readline and Reveal data inspector |
 
 `:repl/help` in the Rebel UI for help and available commands.  `:repl/quit` to close the REPL.
 
@@ -355,11 +360,14 @@ Include Java source on the  classpath to [look up Java Class and method definiti
 
 Requires: Java sources installed locally (e.g. `"/usr/lib/jvm/openjdk-17/lib/src.zip"`)
 
-* `:lib/java8-source`
-* `:lib/java11-source`
-* `:lib/java17-source`
+* `:src/java8`
+* `:src/java11`
+* `:src/java17`
+* `:src/clojure`
 
-Use the aliases with either `-M` or `-X` flags on the Clojure command line.
+Use the aliases with either `-A`, `-M` or `-X` execution options on the Clojure command line.
+
+> Clone [clojure/clojure](https://github.com/clojure-expectations/clojure-test) repository. Clojure core Java source code in [src/jvm/clojure/lang/](https://github.com/clojure/clojure/tree/master/src/jvm/clojure/lang "GitHub: Clojure core Java source code")
 
 ## Databases and drivers
 
@@ -411,51 +419,40 @@ any [Clojure aware editor]([Clojure aware editors](https://practical.li/clojure/
 
 Reveal can also used as a `tap>` source for more powerful manual debugging.
 
-* `:inspect/reveal` - visualisation with terminal REPL.
+* `:inspect/reveal` - simple terminal UI Clojure REPL with Reveal data visualisation UI.
 * `:inspect/reveal-light` - as above with light theme and 32 point Ubuntu Mono font
-* `:inspect/reveal-nrepl` - visualization for [Clojure aware editors](https://practical.li/clojure/clojure-editors/) via an nrepl server
+* `:inspect/reveal-nrepl` - as `:inspect/reveal` with nREPL server for [Clojure aware editors](https://practical.li/clojure/clojure-editors/)
 * `:inspec/reveal-light-nrepl` - as above with light theme and 32 point Ubuntu Mono font
-* `:inspect/reveal-nrepl-cider` - visualization tool for Emacs Cider / Spacemacs / VSCode Calva
-* `:inspec/reveal-light-nrepl-cider` - as above with light theme and 32 point Ubuntu Mono font
+* `:inspect/reveal-nrepl-cider` - as `:inspect-nrepl` with Clojure nREPL support for Emacs Cider
+* `:inspec/reveal-light-cider` - as above with light theme and 32 point Ubuntu Mono font
 
 | Command                                      | Description                                                                        |
 |----------------------------------------------|------------------------------------------------------------------------------------|
-| `clojure -M:inspect/reveal`                  | start a Reveal repl with data visualization window (cloure.main)                   |
-| `clojure -M:inspect/reveal-light`            | as above with light theme and large font                                           |
+| `clojure -X:inspect/reveal`                  | start a Reveal repl with data visualization window (cloure.main)                   |
+| `clojure -X:inspect/reveal-light`            | as above with light theme and large font                                           |
 | `clojure -X:inspect/reveal`                  | start a Reveal repl with data visualization window (clojure exec)                  |
 | `clojure -X:inspect/reveal-light`            | as above with light theme and large font                                           |
 | `clojure -M:inspect/reveal-nrepl`            | Start nrepl server to use Cider / Calva editors with reveal                        |
-| `clojure -X:inspect/reveal-light-nrepl`      | as above with light theme and large font                                           |
-| `clojure -M:inspect/reveal-rebel`            | Start a Rebel REPL with Reveal Visualisations                                      |
-| `clojure -M:inspect/reveal-light-rebel`      | Start a Rebel REPL with Reveal Visualisations & light theme                        |
-| `clojure -M:inspect/reveal:repl/rebel`       | Start a Rebel REPL with Reveal dependency. Add reveal as tap> source               |
-| `clojure -M:inspect/reveal-light:repl/rebel` | Start a Rebel REPL with Reveal dependency & light theme. Add reveal as tap> source |
+| `clojure -M:inspect/reveal-light-nrepl`      | as above with light theme and large font                                           |
+| `clojure -M:inspect/reveal-nrepl`            | Start nrepl server to use Cider / Calva editors with reveal                        |
+| `clojure -M:inspect/reveal-light-nrepl`      | as above with light theme and large font                                           |
 
-#### Connecting nREPL based editors
-
-Use the `:inspect/reveal-nrepl` alias when running the REPL, either in the terminal or via an nREPL based editor (CIDER, Calva, Conjure, Cursive, etc.)
-
-Alternatively, add an `.nrepl.edn` file to the root of a project to include the Reveal middleware
-
-```clojure
-{:middleware [vlaaad.reveal.nrepl/middleware]}
-```
 
 #### Cider jack-in and reveal
 
 See the [Reveal section of Practicalli Clojure](https://practical.li/clojure/clojure-cli/data-browsers/reveal.html#using-reveal-with-nrepl-editors) for full details, including how to set up a `.dir-locals.el` configuration.
 
-`:inspect/reveal-nrepl-cider` alias contains Reveal REPL with nrepl server and Emacs CIDER specific middleware
+`:inspect/reveal-cider` alias contains Reveal REPL with nrepl server and Emacs CIDER specific middleware
 
 `C-u cider-jack-in-clj` in CIDER to start a reveal REPL  (`SPC u , '` in Spacemacs)
 
 Edit the jack-in command by deleting the all the configuration after the `clojure` command and add the alias
 
 ```shell
-clojure -M:inspect/reveal-nrepl-cider
+clojure -M:inspect/reveal-cider
 ```
 
-`:inspect/reveal-nrepl-cider` is a light version of the above.
+`:inspect/reveal-cider` is a light version of the above.
 
 #### Running different types of repl
 
@@ -574,22 +571,32 @@ Include expectations as a development dependency in a project `clojure -M:env/te
 
 ## Test runners and Test Coverage tools
 
-Tools to run unit tests in a project which are defined under `test` path.
+Run unit tests in a project which are defined under the `test` path. See [Practicalli Clojure: Unit testing](https://practical.li/clojure/testing/unit-testing/)
 
 | Command                            | Description                                                                               |
 |------------------------------------|-------------------------------------------------------------------------------------------|
-| `clojure -M:test/run`              | run tests with the Kaocha comprehensive test runner for Clojure (same as :test/kaocha)    |
-| `clojure -M:test/watch`            | run tests in watch mode using Kaocha test runner for Clojure (same as :test/kaocha-watch) |
+| `clojure -X:test/run`              | run tests with the Kaocha comprehensive test runner for Clojure (same as :test/kaocha)    |
+| `clojure -X:test/watch`            | run tests in watch mode using Kaocha test runner for Clojure (same as :test/kaocha-watch) |
 | `clojure -X:test/cognitect`        | Cognitect Clojure test runner                                                             |
 | `clojure -X:test/coverage`         | Cloverage clojure.test coverage report                                                    |
 | `clojure -M:test/cljs`             | ClojureScript test runner (Olical)                                                        |
-| `clojure -M:test/kaocha`           | Kaocha - test runner for Clojure                                                          |
+| `clojure -X:test/kaocha`           | Kaocha - test runner for Clojure  (same as :test/run)                                     |
 | `clojure -M:test/kaocha-cljs`      | Kaocha - test runner for ClojureScript                                                    |
 | `clojure -M:test/kaocha-cucumber`  | Kaocha - test runner with BDD Cucumber tests                                              |
 | `clojure -M:test/kaocha-junit-xml` | Kaocha - test runner with Junit XML reporting for CI dashboards & wallboards              |
 | `clojure -M:test/kaocha-cloverage` | Kaocha - test runner with test coverage reporting                                         |
 
+`:lib/kaocha` alias adds kaocha as a library to the class path, enabling scripts such as kaocha-runner.el to run Kaocha test runner from Emacs Cider
+
 > A `test.edn` [configuration file](https://cljdoc.org/d/lambdaisland/kaocha/1.0.829/doc/3-configuration) can be used with the :test/run alias instead of using various aliases defined above
+> Kaocha aliases can be run with `-T` execution option if both the `src` and `test` paths are included, either in the combined deps.edn config or in the `tests.edn` config.
+
+[kaocha recommends adding a `bin/kaocha` shell script](https://github.com/lambdaisland/kaocha#clojure-cli-toolsdeps) to run the tool, which can be written using the Practicalli aliases, for example:
+
+```bash
+#!/usr/bin/env sh
+clojure -X:test/run "$@"
+```
 
 ## Lint tools
 
