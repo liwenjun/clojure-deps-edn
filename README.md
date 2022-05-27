@@ -1,5 +1,7 @@
 ![Practicalli Clojure deps.edn user wide configuration for Clojure projects](https://raw.githubusercontent.com/practicalli/graphic-design/live/practicalli-clojure-deps.png)
 
+[![License CC By SA 4.0](https://img.shields.io/badge/license-CC%20BY--SA%204.0%20-blueviolet)](http://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1)
+[![GitHub Sponsors for practicalli-john](https://img.shields.io/github/sponsors/practicalli-john)](https://github.com/sponsors/practicalli-john)
 ![clj-kondo GitHub action](https://github.com/practicalli/clojure-deps-edn/actions/workflows/lint-with-clj-kondo.yml/badge.svg)
 [![MegaLinter](https://github.com/practicalli/clojure-deps-edn/actions/workflows/megalinter.yaml/badge.svg)](https://github.com/practicalli/clojure-deps-edn/actions/workflows/megalinter.yaml)
 
@@ -110,8 +112,8 @@ How to run common tasks for Clojure development.
 | Run REPL (rebel readline with nrepl server)            | `clojure -M:repl/rebel`                                         | User alias         |
 | Run ClojureScipt REPL with nREPL (editor support)      | `clojure -M:repl/cljs-nrepl`                                    | User alias         |
 | Download dependencies                                  | `clojure -P`  (followed by optional aliases)                    | Built-in           |
-| Find libraries (mvn & git)                             | `clojure -M:search/libraries library-name(s)`                   | User alias         |
-| Find available versions of a library                   | `clojure -X:deps find-versions`                                 | Built-in           |
+| Find libraries (Clojars & Maven Central)               | `clojure -M:search/libraries library-name(s)`                   | User alias         |
+| Find available versions of a library                   | `clojure -X:deps find-versions :lib domain/library-name`        | Built-in           |
 | Resolve git coord tags to shas and update deps.edn     | `clojure -X:deps git-resolve-tags git-coord-tag`                | Built-in           |
 | Generate image of project dependency graph             | `clojure -T:project/graph-deps`                                 | User alias         |
 | Check library dependencies for newer versions          | `clojure -T:search/outdated`                                    | User alias         |
@@ -124,7 +126,9 @@ How to run common tasks for Clojure development.
 
 > Add alias `:project/run` to the deps.edn file in the root of a project:
 >
-> `:project/run {:ns-default domain.namespace :exec-fn -main}` - see this video for an example <https://youtu.be/u5VoFpsntXc?t=2166
+> `:project/run {:exec-fn domain.namespace/-main}`
+>
+> Watch: [Clojure CLI - practicalli/clojure-deps-edn community tools](https://youtu.be/u5VoFpsntXc?t=2166) to see some of these in action
 
 
 # Aliases

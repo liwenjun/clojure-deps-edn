@@ -243,9 +243,19 @@
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Alternative REPLs - not extensively tested
 
-  ;; Clojure Socket REPL on port 50505:
-  ;; clojure -M:repl/socket
+  ;; Clojure Socket REPL on port 55555:
+  ;; clojure -X:repl/socket
   :repl/socket
+  {:exec-fn clojure.core.server/start-server
+   :exec-args {:name "repl-server"
+               :port 55555
+               :accept clojure.core.server/repl
+               :server-daemon false}}
+
+  ;; Older Socket REPL approaches to review:
+
+  ;; clojure -M:repl/socket-jvm-opts (lesser used approach)
+  :repl/socket-jvm-opts
   {:jvm-opts ["-Dclojure.server.repl={:port,50505,:accept,clojure.core.server/repl}"]}
 
   ;; Clojure Socket REPL on an available port, displaying port number (container/cloud environments)
@@ -1128,15 +1138,8 @@
   ;; Maven Central and Clojars are the canonical repositories for library dependencies
   ;; JCenter is large and fast mirror often accessible behind corporate firewalls
 
-  :mvn/repos {;; "central" {:url "https://repo1.maven.org/maven2/"}
-             ;; "clojars" {:url "https://repo.clojars.org/"}
-
-             "central" {:url "http://maven.aliyun.com/nexus/content/groups/public/"}
-             "clojars" {:url "https://mirrors.tuna.tsinghua.edu.cn/clojars/"}
-
-             ;; using local repo
-             ;; "central" {:url "http://20.60.250.188/nexus/repository/central/"}
-             ;; "clojars" {:url "http://20.60.250.188/nexus/repository/corjars/"}
+  :mvn/repos {"central" {:url "http://maven.aliyun.com/nexus/content/groups/public/"}
+              "clojars" {:url "https://mirrors.tuna.tsinghua.edu.cn/clojars/"}
 
              ;; Clojure snapshots
              ;; "sonatype" {:url "https://oss.sonatype.org/content/repositories/snapshots/"}
