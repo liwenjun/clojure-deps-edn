@@ -105,13 +105,18 @@
 
   ;; Interactive client REPL with nREPL server for Clojure Editor support
   :repl/interactive
-  {:extra-deps {nrepl/nrepl {:mvn/version "0.9.0"}}
-   :main-opts  ["-m" "nrepl.cmdline" --interactive]}
+  {:extra-deps {nrepl/nrepl {:mvn/version "0.9.0"}
+                cider/cider-nrepl {:mvn/version "0.28.4"}}
+   :main-opts  ["-m" "nrepl.cmdline"
+                "--middleware" "[cider.nrepl/cider-middleware]"
+                "--interactive"]}
 
   ;; Headless REPL with nREPL server for Clojure Editor support
   :repl/headless
-  {:extra-deps {nrepl/nrepl {:mvn/version "0.9.0"}}
-   :main-opts  ["-m" "nrepl.cmdline"]}
+  {:extra-deps {nrepl/nrepl {:mvn/version "0.9.0"}
+                cider/cider-nrepl {:mvn/version "0.28.4"}}
+   :main-opts  ["-m" "nrepl.cmdline"
+                "--middleware" "[cider.nrepl/cider-middleware]"]}
 
   ;; Run an interactive Clojure REPL with nREPL connection and CIDER libraries
   ;; clojure -M:repl/cider
@@ -120,7 +125,7 @@
                 cider/cider-nrepl {:mvn/version "0.28.4"}}
    :main-opts  ["-m" "nrepl.cmdline"
                 "--middleware" "[cider.nrepl/cider-middleware]"
-                "-i"]}
+                "--interactive"]}
 
   :repl/cider-refactor
   {:extra-deps {nrepl/nrepl                   {:mvn/version "0.9.0"}
@@ -128,7 +133,7 @@
                 refactor-nrepl/refactor-nrepl {:mvn/version "3.5.2"}}
    :main-opts  ["-m" "nrepl.cmdline"
                 "--middleware" "[refactor-nrepl.middleware/wrap-refactor,cider.nrepl/cider-middleware]"
-                "-i"]}
+                "--interactive"]}
 
   ;; clojure -M:repl/cider-cljs
   :repl/cider-cljs
@@ -137,7 +142,7 @@
                 cider/cider-nrepl               {:mvn/version "0.28.4"}
                 cider/piggieback                {:mvn/version "0.5.3"}}
    :main-opts  ["-m" "nrepl.cmdline"
-                "-i"
+                "--interactive"
                 "--middleware" "[cider.nrepl/cider-middleware,cider.piggieback/wrap-cljs-repl]"]}
 
   :repl/figwheel
@@ -147,7 +152,7 @@
                 cider/cider-nrepl               {:mvn/version "0.28.4"}
                 cider/piggieback                {:mvn/version "0.5.3"}}
    :main-opts  ["-m" "nrepl.cmdline"
-                "-i"
+                "--interactive"
                 "--middleware" "[cider.nrepl/cider-middleware,cider.piggieback/wrap-cljs-repl]"]}
 
   ;;;; Rebel Readline enhanced REPL UI
@@ -166,7 +171,7 @@
                 com.bhauman/rebel-readline {:mvn/version "0.1.4"}}
    :main-opts  ["-m" "nrepl.cmdline"
                 "--middleware" "[cider.nrepl/cider-middleware]"
-                "-i"
+                "--interactive"
                 "-f" "rebel-readline.main/-main"]}
 
   ;; Not working!
@@ -176,7 +181,7 @@
   ;;               com.bhauman/rebel-readline {:mvn/version "0.1.4"}}
   ;;  :main-opts  ["-m" "nrepl.cmdline"
   ;;               "--middleware" "[cider.nrepl/cider-middleware]"
-  ;;               "-i"
+  ;;               "--interactive"
   ;;               "-f" "rebel-readline.main/-main"
   ;;               "-e" "(ns,practicalli.jgit-hack),(alter-var-root,#'*ns*,(constantly,(find-ns,'practicalli.jgit-hack)))"]}
 
@@ -197,7 +202,7 @@
                 cider/cider-nrepl               {:mvn/version "0.28.4"}
                 cider/piggieback                {:mvn/version "0.5.3"}}
    :main-opts  ["-m" "nrepl.cmdline"
-                "-i"
+                "--interactive"
                 "--middleware" "[cider.nrepl/cider-middleware,cider.piggieback/wrap-cljs-repl]"
                 "-f" "rebel-readline.cljs.main/-main"]}
 
@@ -243,7 +248,7 @@
    :main-opts  ["-m" "nrepl.cmdline"
                 "--connect"
                 "--middleware" "[cider.nrepl/cider-middleware]"
-                "-i"
+                "--interactive"
                 "-f" "rebel-readline.main/-main"]}
 
   ;; End of remote REPL connections
@@ -732,7 +737,7 @@
   {:extra-deps {rickmoynihan/nrebl.middleware {:mvn/version "0.3.1"}}
    :main-opts  ["-e" "((requiring-resolve,'cognitect.rebl/ui))"
                 "-m" "nrepl.cmdline"
-                "-i"
+                "--interactive"
                 "--middleware" "[nrebl.middleware/wrap-nrebl,cider.nrepl/cider-middleware]"]}
 
   ;; Supporting aliases for nrebl.middleware

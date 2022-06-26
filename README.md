@@ -45,7 +45,7 @@ The **[Practicalli Clojure book](https://practical.li/clojure)** uses this confi
 
 ## Install Practicalli clojure-deps-edn
 
-[Clojure CLI](https://clojure.org/guides/getting_started) version **1.10.3.1040** or later is recommended. Check the version of Clojure CLI currently installed via:
+[Clojure CLI](https://clojure.org/guides/install_clojure) version **1.11.1.xxxx** or later is recommended. Check the version of Clojure CLI currently installed via:
 
 ```shell
 clojure -Sdescribe
@@ -71,7 +71,9 @@ The `deps.edn` file in the Clojure CLI configuration directory contains all the 
 
 ### Location of local Maven repository
 
-`:mvn/local-repo` key is used to set the local maven repository (the directory where all downloaded jar files are saved) to `~/.cache/maven/repository` to follow the XDG specification.  Consider moving the contents of `~/.m2/repository` to `~/.cache/maven/repository` to avoid downloading jar files that already exist locally.
+`$HOME/.m2/repository` is the default location of the local maven repository, the directory where library dependency jar files are cached.
+
+`:mvn/local-repo` is a top-level key to set the local maven repository location, such as `$HOME/.cache/maven/repository` to follow the XDG specification.  If setting `:mvn/local-repository`, consider moving the contents of `$HOME/.m2/repository` to the new location to avoid downloading currently cached jar files (or use this as an opportunity to clear out the cache).
 
 
 ### Updating Practicalli clojure-deps-edn
@@ -82,7 +84,7 @@ The versions of libraries are updated at least once per month using the `:projec
 
 ```shell
 cd $XDG_CONFIG_HOME/clojure
-clojure -T:project/outdated > outdated.org
+clojure -T:search/outdated > outdated.org
 ```
 
 > antq can also be installed as a separate tool (this is not part of practicalli/clojure-deps-edn yet)
@@ -114,7 +116,7 @@ How to run common tasks for Clojure development.
 |--------------------------------------------------------|-----------------------------------------------------------------|--------------------|
 | Create project (clojure exec)                          | `clojure -T:project/new :template app :name practicalli/my-app` | User alias         |
 | Run REPL (rebel readline with nrepl server)            | `clojure -M:repl/rebel`                                         | User alias         |
-| Run ClojureScipt REPL with nREPL (editor support)      | `clojure -M:repl/cljs-nrepl`                                    | User alias         |
+| Run ClojureScript REPL with nREPL (editor support)      | `clojure -M:repl/cljs-nrepl`                                    | User alias         |
 | Download dependencies                                  | `clojure -P`  (followed by optional aliases)                    | Built-in           |
 | Find libraries (Clojars & Maven Central)               | `clojure -M:search/libraries library-name(s)`                   | User alias         |
 | Find available versions of a library                   | `clojure -X:deps find-versions :lib domain/library-name`        | Built-in           |
@@ -189,7 +191,7 @@ Run an interactive REPL on the command line with the simple terminal UI, includi
 | Command                          | Description                                                                       |
 |----------------------------------|-----------------------------------------------------------------------------------|
 | `clojure -M:repl/nrepl`          | Clojure REPL with nREPL server for editor support                                 |
-| `clojure -M:repl/cljs-nrepl`     | ClojureScipt REPL with nREPL for editor support                                   |
+| `clojure -M:repl/cljs-nrepl`     | ClojureScript REPL with nREPL for editor support                                  |
 | `clojure -M:repl/cider`          | Clojure REPL with nREPL server and Cider-nrepl                                    |
 | `clojure -M:repl/cider-refactor` | Clojure REPL with nREPL server, Cider-nrepl and clj-refactor                      |
 | `clj -M:repl/reveal-nrepl`       | Clojure REPL with Reveal data visualization and nREPL interactively               |
@@ -304,16 +306,16 @@ Then the project can be run using `clojure -X:project/run` and arguments can opt
 * [`:project/check`](https://github.com/athos/clj-check.git) - detailed report of compilation errors for a project
 * [`:project/graph-deps`](https://github.com/clojure/tools.deps.graph) - graph of project dependencies (png image)
 * [`:search/libraries`](https://github.com/hagmonk/find-deps) - fuzzy search for libraries to add as dependencies
-* [`:project/outdated`](https://github.com/liquidz/antq) - report newer versions for maven and git dependencies
-* [`:project/outdated-mvn`](https://github.com/slipset/deps-ancient) - check for newer dependencies (maven only)
+* [`:search/outdated`](https://github.com/liquidz/antq) - report newer versions for maven and git dependencies
+* [`:search/outdated-mvn`](https://github.com/slipset/deps-ancient) - check for newer dependencies (maven only)
 
-| Command                                              | Description                                                             |
-|------------------------------------------------------|-------------------------------------------------------------------------|
-| `clojure -M:project/check`                           | detailed report of compilation errors for a project                     |
-| `clojure -M:search/libraries library-name`          | fuzzy search Maven & Clojars                                            |
-| `clojure -M:search/libraries -F:merge library-name` | fuzzy search Maven & Clojars and save to project deps.edn               |
-| `clojure -T:project/outdated`                        | report newer versions for maven and git dependencies                    |
-| `clojure -M:project/outdated-mvn`                    | check for newer dependencies (maven only)                               |
+| Command                                             | Description                                               |
+|-----------------------------------------------------|-----------------------------------------------------------|
+| `clojure -M:project/check`                          | detailed report of compilation errors for a project       |
+| `clojure -M:search/libraries library-name`          | fuzzy search Maven & Clojars                              |
+| `clojure -M:search/libraries -F:merge library-name` | fuzzy search Maven & Clojars and save to project deps.edn |
+| `clojure -T:search/outdated`                        | report newer versions for maven and git dependencies      |
+| `clojure -M:search/outdated-mvn`                    | check for newer dependencies (maven only)                 |
 
 ## Project analysis
 
@@ -664,15 +666,15 @@ clojure -X:test/run "$@"
 
 Static analysis tools to help maintain code quality and suggest Clojure idioms.
 
-* [`:lint/kondo`](https://github.com/borkdude/clj-kondo/) - comprehensive and fast static analysis lint tool
+* [`:lint/clj-kondo`](https://github.com/borkdude/clj-kondo/) - comprehensive and fast static analysis lint tool
 * [`:lint/eastwood`](https://github.com/jonase/eastwood) - classic lint tool for Clojure
 * [`:lint/idiom-check`](https://github.com/jonase/kibit) - checking for idiomatic Clojure code with Kibit
 
-| Command                    | Description                                      |
-|----------------------------|--------------------------------------------------|
-| `clojure -M:lint/kondo`    | comprehensive and fast static analysis lint tool |
-| `clojure -M:lint/eastwood` | classic lint tool for Clojure                    |
-| `clojure -M:lint/idiom`    | Suggest idiomatic Clojure code                   |
+| Command                     | Description                                      |
+|-----------------------------|--------------------------------------------------|
+| `clojure -M:lint/clj-kondo` | comprehensive and fast static analysis lint tool |
+| `clojure -M:lint/eastwood`  | classic lint tool for Clojure                    |
+| `clojure -M:lint/idiom`     | Suggest idiomatic Clojure code                   |
 
 
 ## Visualising project vars and library dependencies
